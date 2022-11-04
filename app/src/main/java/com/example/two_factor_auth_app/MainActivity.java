@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Intent i = new Intent(MainActivity.this, PinActivity.class);
+                            i.putExtra("phone_no",edtPhone.getText().toString());
                             startActivity(i);
                             finish();
                         } else {
