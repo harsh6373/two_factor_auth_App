@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Two_factor_auth_App"
         tools:targetApi="31">
         <activity
+            android:name=".PinActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -13,4 +13,10 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        ...
+        <item name="pinViewStyle">@style/PinWidget.PinView</item>
+    </style>
+
+
 </resources>
