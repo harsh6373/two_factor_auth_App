@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextWatcher;
@@ -25,21 +27,31 @@ public class PinActivity extends AppCompatActivity {
 
     EditText pin,confirm_pin;
     Button generate_pin;
-    private FirebaseFirestore db;
+   // private FirebaseFirestore db;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin);
 
+        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        String s1 = sh.getString("boolean", "");
+
+        if (s1 == "true"){
+            startActivity(new Intent(PinActivity.this,Pin_Check.class));
+        }
+
         String pinPattern = "[0-9]{6}";
         pin = findViewById(R.id.pin_edittext);
         confirm_pin = findViewById(R.id.pin_edittext2);
 
         generate_pin = findViewById(R.id.generate_pin);
-        db = FirebaseFirestore.getInstance();
+        //db = FirebaseFirestore.getInstance();
 
         String phoneno = getIntent().getStringExtra("phone_no");
+
+        dbHelper = new DBHelper(PinActivity.this);
 
         generate_pin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +80,17 @@ public class PinActivity extends AppCompatActivity {
                 }
 
                 else {
-                    addDatatoFirestore(phoneno,pin1);
+                    dbHelper.insertdata(phoneno,pin1);
+                  Toast.makeText(PinActivity.this, "Pin Generated Sucessfully", Toast.LENGTH_SHORT).show();
+
+                  SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref",MODE_PRIVATE);
+                  SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                  myEdit.putString("boolean", "true");
+                  myEdit.commit();
+
+                  Intent intent = new Intent(PinActivity.this,Pin_Check.class);
+                  intent.putExtra("p",phoneno);
+                  startActivity(intent);
               }
             }
         });
@@ -77,20 +99,5 @@ public class PinActivity extends AppCompatActivity {
 
     }
 
-    private void addDatatoFirestore(String phoneno, int pin1) {
-        CollectionReference dbPin = db.collection("Pin");
 
-        //DocumentReference documentReference = dbPin.document(phoneno);
-
-        Pin pinn = new Pin(phoneno,pin1);
-
-        dbPin.document("SF").set(pinn);
-        Toast.makeText(PinActivity.this, "Pin Generated Sucessfully", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(PinActivity.this,Pin_Check.class);
-        intent.putExtra("p",phoneno);
-        startActivity(intent);
-
-
-    }
 }

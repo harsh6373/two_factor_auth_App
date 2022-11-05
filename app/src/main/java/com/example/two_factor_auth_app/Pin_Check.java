@@ -1,36 +1,22 @@
 package com.example.two_factor_auth_app;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
 
 public class Pin_Check extends AppCompatActivity {
 
     EditText edt_pin;
     Button verify_btn;
     private FirebaseFirestore db;
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,28 +30,25 @@ public class Pin_Check extends AppCompatActivity {
         String phonenoo = getIntent().getStringExtra("p");
 
         String pin = edt_pin.getText().toString();
+        dbHelper = new DBHelper(Pin_Check.this);
 
         verify_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DocumentReference docRef = db.collection("Pin").document("SF");
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.get("phone_no")==phonenoo && document.get("pin") == pin) {
-                                Toast.makeText(Pin_Check.this, "Sucess", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Log.d(TAG, "No such document");
-                            }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                        }
-                    }
-                });
+                int pin = Integer.parseInt(edt_pin.getText().toString());
+                int pin_check = dbHelper.readdata(phonenoo);
+
+                if (pin == pin_check){
+                    Toast.makeText(Pin_Check.this, "Welcome...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Pin_Check.this,Home.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(Pin_Check.this, "Wrong Pin", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 }
+

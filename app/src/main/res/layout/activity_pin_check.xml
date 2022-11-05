@@ -5,8 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     tools:context=".Pin_Check">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/upwave"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView"
@@ -16,7 +28,7 @@
         android:layout_marginTop="35dp"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:textColor="@color/orange"
+        android:textColor="@color/purple_500"
         android:text="Verify  Pin" />
 
     <TextView
@@ -63,6 +75,17 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="133dp"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
 
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="end"
+        android:background="@drawable/downwave" />
 
 </LinearLayout>
